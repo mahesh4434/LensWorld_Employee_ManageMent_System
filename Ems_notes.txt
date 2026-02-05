@@ -1,0 +1,258 @@
+EMS PRoject notes 
+
+Employee Management System 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+@Transctional 
+
+1) In Spring Boot, the @Transactional annotation can be applied at the method or class level to indicate that the methods within that scope should be executed within a transaction context.
+When a method annotated with @Transactional is called,
+Spring Boot will start a new transaction before executing the method and commit or rollback the transaction based on the method's outcome (success or failure).
+
+
+2) @trasctional annotation is used to manage transactions in spring boot In simple terms a transaction is a sequence of operations performed as a single logical unit of work
+A transaction must be atomic, consistent, isolated, and durable (ACID).
+This ensures that all database operations within the method are treated as a single unit, providing data integrity and consistency.
+
+3) When a method annotated with @Transactional is called, Spring Boot will start a new transaction with the database. 
+If the method completes successfully, the transaction is committed, and all changes made during the transaction are saved to the database. 
+However, if an exception occurs during the method execution, the transaction is rolled back, and all changes made during the transaction are discarded,
+ ensuring that the database remains in a consistent state.
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+JPA Repository 
+
+1) This interface will provide us the basic CRUD operations for Employee entity without writing any code
+2) JpaRepository is a JPA specific extension of Repository interface
+3) It contains the full API of CrudRepository and PagingAndSortingRepository
+4) So it provides JPA related methods such as flushing the persistence context and delete records in a batch    
+5) By extending JpaRepository we can use methods like save(), findById(), findAll(), deleteById() etc.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+JpaRepository<Employee, Long>
+
+1) for the <Employee, Long> 1st parameter is the entity type means the class which is mapped to the table
+2) 2nd is the primary key type of that entity(table)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+EmployeeDto Class:
+
+1) use of this class is to transfer data between different layers of the application
+2) also used as a response object to send data back to the client
+3) like trasferring data from the controller layer to the service layer or from the service layer to the repository layer
+4) it helps to decouple the internal representation of the data from the external representation
+5) also helps to validate and format the data before sending it to the client or saving it to the database
+6) also helps to reduce the amount of data sent over the network by only including the necessary fields
+7) also helps to improve the security of the application by hiding sensitive fields that should not be exposed to the client
+8) also helps to improve the readability of the code by providing meaningful names for the fields and methods
+9) also helps to improve the scalability of the application by allowing to easily add or remove fields from the DTOs without affecting the other layers of the application
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Employee mapper class 
+
+
+public class EmployeeMapper {
+
+    public static EmployeeDto mapToEmployeeDto(Employee employee) {
+        return new EmployeeDto(
+                employee.getId(),
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getEmail()
+        );
+    }
+
+    public static Employee mapToEmployee(EmployeeDto employeeDto) {
+        return new Employee(
+                employeeDto.getId(),
+                employeeDto.getFirstName(),
+                employeeDto.getLastName(),
+                employeeDto.getEmail()
+        );
+    }
+
+}
+
+1) use of this class in details and simple terms:
+2)  The EmployeeMapper class is responsible for converting between Employee entity objects and EmployeeDto data transfer objects
+3)  This is useful because the Employee entity represents the data as it is stored in the database, while the EmployeeDto represents the data as 
+it is sent over the network or used in the application
+4)  By using a mapper class, we can separate the concerns of data storage and data transfer, making the code more modular and easier to maintain
+5)  The mapToEmployeeDto method takes an Employee object as input and returns a corresponding EmployeeDto object
+6)  It extracts the relevant fields from the Employee object and uses them to create a new EmployeeDto object
+7)  The mapToEmployee method does the opposite: it takes an EmployeeDto object as input and returns a corresponding Employee object
+8)  It extracts the relevant fields from the EmployeeDto object and uses them to create a new Employee object
+9) This mapping process allows us to easily convert between the two representations of the data, enabling us to work with the data in 
+the most appropriate format for each layer of the application             
+    
+	
+	-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	@RequestBody EmployeeDto employeeDto
+	
+	1) @RequestBody EmployeeDto employeeDto it will convert JSON to EmployeeDto object
+	2-
+	----------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	@Autowired 
+	
+	 1)@Autowired  private EmployeeService employeeService; this will inject the EmployeeService implementation class object IT
+	 menas in simple words it will create the object of EmployeeServiceImpl class Not will create object it will manage the object 
+	 creation using spring ioc container and dependency injection and inject already created object here from the container
+	 
+	 	--------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+	@RequestParam("id") Long id	
+1) use of @RequestParam("id") Long id allows us to extract the "id" query parameter from the 
+URL of the GET request.means if you sent id from postman like /api/employees?id=1 then it 
+will extract the value 1 and assign it to the Long id parameter in the method.
+//for example: /api/employees?id=1 it will extract id=1
+
+	 	-----------------------------------------------------------------------------------------------------------------------------------------------------
+		
+(@PathVariable("id") Long id) This is used for mapping the value of the URI template variable {id} to the method parameter id in the getEmployeeById method.
+in simple terms, it allows you to extract the value of id from the URL when a request is made to the endpoint /api/employees/{id}.
+for example, if a client makes a GET request to /api/employees/5, the value 5 will be passed to the id parameter of the getEmployeeById method.
+
+	 	--------------------------------------------------------------------------------------------------------------------------------------------------
+
+differnece betwen @PathVariable and @RequestParam
+1) @PathVariable is used to extract values from the URI path itself.
+For example, in a URL like /api/employees/1, the value 1 is part of the path and can be extracted using @PathVariable.
+2) On the other hand, @RequestParam is used to extract query parameters from the URL.
+//For example, in a URL like /api/employees?id=1, the value 1 is a query parameter and can be extracted using @RequestParam. 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+employees.stream().map((employee) -> EmployeeMapper.mapToEmployeeDto(employee)).collect(Collectors.toList()); 
+explain me this code in simple detailed langaude
+
+1) This line of code is using Java Streams to convert a list of Employee entities into a list of EmployeeDto objects. Here's a breakdown of how it works:
+1. employees.stream(): This converts the List<Employee> into a Stream<Employee>, which allows for functional-style operations on the collection.
+2. .map((employee) -> EmployeeMapper.mapToEmployeeDto(employee)): The map function takes each Employee object from the stream and applies
+ the provided lambda function to it. In this case, the lambda function calls EmployeeMapper.mapToEmployeeDto(employee), which converts 
+ the Employee entity into an EmployeeDto object.
+3. .collect(Collectors.toList()): Finally, the collect method gathers all the EmployeeDto objects produced by the map operation and collects them into
+ a new List<EmployeeDto>.
+4. The end result is a List<EmployeeDto> that contains the DTO representations of all the Employee entities from the original list.         
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+1) why we use @putmapping
+1) PUT is used for updating existing resources, while POST is typically used for creating new resources. 
+2)Using PUT here indicates that we are updating an existing employee with the specified ID.
+3) but if existing id emplyoyee not found then it will throw resource not found exception
+
+@PostMapping
+1) Basically used for create new resource @postmapping here then it will create new employee with given id if not found dont throw and error 
+
+
+* difference between put and post in rest api
+1) PUT is idempotent, meaning that multiple identical requests will have the same effect as a single request.
+2) POST is not idempotent, meaning that multiple identical requests may result in different outcomes
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+1) which one is best for update operation in rest api put or patch?
+2) Both PUT and PATCH can be used for update operations in REST APIs, but they serve different purposes.
+3) PUT is best suited for full updates where the entire resource is replaced,
+4) while PATCH is ideal for partial updates where only specific fields are modified.  
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+difference between put,post patch and delete in rest api
+1) POST is used to create a new resource.
+2) PUT is used to update an existing resource or create it if it doesn't exist (idempotent).
+3) PATCH is used for partial updates to an existing resource.
+4) DELETE is used to remove a resource.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+How To Create React application 
+
+Select framework React and hit enter
+select javascript and hit enter 
+
+Now we have to install and run react application 
+
+npm install
+npm run dev -- used to run react application using viteJs
+
+
+-------------------------------------------------------------------------------------------------------------------
+Project Structure 
+
+1) package.json file 
+
+1) package.json file contains the metadata and dependencies for the React frontend application. It specifies the project name, version, )
+scripts for development and building, 
+2) and lists the required dependencies and devDependencies for the project. ansd used fpr managing the project and its dependencies.
+3) basically it is used to manage the project and its dependencies. It allows you to run scripts for development, building, and linting, 
+and it specifies the required libraries for the React application.
+
+2) vite.config.js file 
+
+1) vite.config.js is used to configure the Vite build tool for the React project.
+2) in simple words it sets up the development server and plugins needed for the project to run smoothly.
+
+3) Index.html 
+
+1) index.html file is used for defining the basic structure of the web application. It includes the root div where the React application will be
+ mounted and links to the main JavaScript file that bootstraps the React app.
+2) in simple terms: The index.html file sets up the basic layout of the web app. It has a place (the root div) where the React app will appear and 
+connects to the main JavaScript file that starts the app.
+
+3)Public folder into thi folder we kept all static files like images and Svg
+4) SRc folder all devlooment related things go into SRC folder 
+
+5) Index.css file 
+this css file contains the global styles for the application. It sets the font, colors, and basic styling for elements like buttons and links. 
+It also includes a media query to adjust the styles for users who prefer a light color scheme.
+
+6) App.jsx file 
+1) use of app.jsx file into react app is to create the main component of the application. It serves as the root component that renders other components
+ and manages the overall state of the application. In this case, the App component is defined with a state variable 'count' and a function 'setCount'
+ to update it. The return statement currently returns an empty fragment, but it can be modified to include JSX elements that represent the UI of the 
+ application.
+2) in simple terms, App.jsx is the main file where you define the structure and behavior of your React application. It is responsible 
+for rendering the UI and managing the state of the application. You can add components, handle user interactions, and implement the logic 
+of your app within this file.
+
+-------------------------------------------------------------------------------------------------------------------
+
+How ca React application flow works 
+
+
+1) when you have call react application through web then 
+index.html get servered 1 st then 
+what ever script tag written into inde.html they call it like 
+for ex. - <script type="module" src="/src/main.jsx"></script> 
+they call main.jsx file 
+
+then 
+2) in jsx file 
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+ it will create a div and render its
+
+.render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+this component will get render into div 
+
+ <App /> -- with in app compnent we can write code 
+ 
+ 
+
+
+
+ 
