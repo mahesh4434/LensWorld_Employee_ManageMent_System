@@ -252,7 +252,57 @@ this component will get render into div
  <App /> -- with in app compnent we can write code 
  
  
+-------------------------------------------------------------------------------------------------------------------
+
+Use of state variable in react 
+Use of use state hook in React -- allows you to use state variable into functional component
+
+UseEffect hook 
+useEffect hook is used to fetch employee data from the backend API when the component mounts. 
+The fetched data is then stored in the employees state using the setEmployees function.(() => {
+Fetch employee data from backend API
+
+ 
+-------------------------------------------------------------------------------------------------------------------
+
+
+BrowserRouter-
+
+use of BrowserRouter is to wrap the entire application and provide routing capabilities. It allows us to define different routes and render 
+specific components based on the URL path. In this case, we have defined two routes: "/" and "/employees", both of which render
+ the ListEmployeeComponent. This enables us to navigate between different pages in our application without needing to refresh the 
+ page, providing a smoother user experience.
+ 
+ 
+in simple terms, BrowserRouter is like a container that holds all the different pages of our application and allows us to switch between 
+them based on the URL. It helps us create a single-page application where we can navigate without reloading the entire page.
+
+
+//FOR EXAMPLE, when we navigate to "http://localhost:3000/employees", the ListEmployeeComponent will be rendered and
+ we will see the list of employees. If we navigate to "http://localhost:3000/", we will also see the same ListEmployeeComponent because both routes 
+ are defined to render the same component. This allows us to have multiple URLs that can lead to the same page in our application.
 
 
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+Route-
+<route is used to define a specific route in our application. It takes two main props: path and element. The path prop specifies the URL path that 
+we want to match, and the element prop specifies the component that should be rendered when that path is accessed. In this case, we have defined 
+two routes: one for the root path ("/") and another for "/employees". Both routes render the ListEmployeeComponent, which means that when we 
+navigate to either of these paths, the ListEmployeeComponent will be displayed on the screen. This allows us to create different pages in our 
+application and control what content is shown based on the URL.
+
+
+In simple terms, the <Route> component is like a rule that says "when the user goes to this URL, show this component". 
+It helps us manage different pages in our application and decide what to display based on the URL.
+
+for example, if we navigate to "http://localhost:3000/employees", the ListEmployeeComponent will be rendered and we will see the list of employees. 
+If we navigate to "http://localhost:3000/", we will also see the same ListEmployeeComponent because both routes are defined to render the same 
+component. This allows us to have multiple URLs that can lead to the same page in our application.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
  
