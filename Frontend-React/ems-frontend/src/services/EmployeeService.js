@@ -11,3 +11,11 @@ export const listEmployees = () => {
 export const createEmployee = (employee) => {
     return axios.post(`${BASE_URL}/add`, employee);
 };
+
+export const getEmployeeById = (id) => {
+    return axios.get(`${BASE_URL}/${id}`);
+}
+
+export const updateEmployee = (id, employee) => {
+    return axios.put(`${BASE_URL}/update/${id}`, employee);
+}
