@@ -19,3 +19,7 @@ export const getEmployeeById = (id) => {
 export const updateEmployee = (id, employee) => {
     return axios.put(`${BASE_URL}/update/${id}`, employee);
 }
+
+export const deleteEmployee = (id) => {
+    return axios.delete(`${BASE_URL}/delete/${id}`);
+}
