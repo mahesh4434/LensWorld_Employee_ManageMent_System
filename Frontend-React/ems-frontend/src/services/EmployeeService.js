@@ -1,7 +1,13 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const REST_API_BASE_URL = 'http://localhost:8080/api/employees/AllEmployees';
+const BASE_URL = 'http://localhost:8080/api/employees';
 
+// Get all employees
 export const listEmployees = () => {
-    return axios.get(REST_API_BASE_URL);
-}
+    return axios.get(`${BASE_URL}/AllEmployees`);
+};
+
+// Create employee
+export const createEmployee = (employee) => {
+    return axios.post(`${BASE_URL}/add`, employee);
+};
